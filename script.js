@@ -2,82 +2,100 @@
 const foods = ['Pizza', 'Tacos', 'Ice Cream', 'Burgers', 'Pasta']
 
 // helper function: will display whatever HTML/text we pass into the #out div
-function render (html) {
-  document.getElementById('out').innerHTML = html
+function render(html) {
+    document.getElementById('out').innerHTML = html
 }
 
-/* 
-  1) listFoods()
-     - Use a for...of loop
-     - Output all foods into the #out div (as <p> tags or list items)
-*/
-function listFoods () {
- let output = ""
-for (const food of foods){
-  output += `<p> ${food}</p>`
-}
-  render(output)
+// 1) listFoods()
+function listFoods() {
+    let output = ""
+    for (const food of foods) {
+        output += `<p>${food}</p>`
+    }
+    render(output)
 }
 
-/* 
-  2) numberedFoods()
-     - Use a classic for loop with index
-     - Output foods as an ordered list (<ol><li>...</li></ol>)
-*/
-function numberedFoods () {
-  let output = `<ol class= "list-group-numbered">`
-
-  for(let i=0; i< foods.length; i++){
-output += `<li class="list-group-item">${foods[i]}</li>`
-  }
-
-  output += `</ol>`
-
-render (output)
+// 2) numberedFoods()
+function numberedFoods() {
+    let output = `<ol class="list-group list-group-numbered">`
+    for (let i = 0; i < foods.length; i++) {
+        output += `<li class="list-group-item">${foods[i]}</li>`
+    }
+    output += `</ol>`
+    render(output)
 }
 
-/* 
-  3) filterFoods()
-     - Prompt the user for a letter
-     - Loop through foods
-     - Only show foods that start with that letter
-     - If no matches, display a "not found" message
-*/
-function filterFoods () {
-const letter = prompt("pick a letter to filter foods that start with that letter")
-if(!letter){
-  render(`<p class="text-muted m-0"> Enter A Letter.</p>`)
-  return
+// 3) filterFoods()
+function filterFoods() {
+    const letter = prompt("Pick a letter to filter foods that start with that letter")
+    if (!letter) {
+        render(`<p class="text-muted m-0">Enter a letter.</p>`)
+        return
+    }
+
+    const lower = letter.toLowerCase()
+    const matches = foods.filter(f => f.toLowerCase().startsWith(lower))
+
+    if (matches.length === 0) {
+        render(`<p class="m-0">There are no foods that start with '<strong>${letter}</strong>'</p>`)
+        return
+    }
+
+    const list = matches.map(item => `<li class="list-group-item">${item}</li>`).join('')
+    render(`<ul class="list-group">${list}</ul>`)
 }
 
-const lower = letter.toLowerCase()
-const matches = foods.filter(f => f.toLowerCase().startsWith(lower))
-
-const list = matches.map(item =>`<li class="list-group-item">${item}</li>`).join('')
-
-if(matches.length = 0){
-render(`<p class="m-0> There are no foods that start with '<strong>${letter}</strong>'</p>`)
-return
+// 4) forEachFoods()
+function forEachFoods() {
+    let cards = '<div class="row justify-content-center">'
+    foods.forEach(food => {
+        cards += `
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">${food}</h5>
+                </div>
+            </div>
+        </div>`
+    })
+    cards += '</div>'
+    render(cards)
 }
 
+// ---- STUDENT WORK SECTION ----
 
-
-
-
-
-render(`<ul class="list-group>${list}</ul>`)
-
-
+// Task 1 — Uppercase List
+function uppercaseList() {
+    const upperFoods = foods.map(f => f.toUpperCase())
+    const list = upperFoods.map(item => `<li class="list-group-item">${item}</li>`).join('')
+    render(`<ul class="list-group">${list}</ul>`)
 }
 
-/* 
-  4) forEachFoods()
-     - Use foods.forEach()
-     - Output each food as a Bootstrap card
-     - Cards should be placed in a centered row
-*/
-function forEachFoods () {
-  // code goes here
+// Task 2 — Reverse List
+function reverseList() {
+    const reversed = [...foods].reverse()
+    const list = reversed.map(item => `<li class="list-group-item">${item}</li>`).join('')
+    render(`<ul class="list-group">${list}</ul>`)
+}
+
+// Task 3 — Random Food Picker
+function randomFoodPicker() {
+    const randomIndex = Math.floor(Math.random() * foods.length)
+    const food = foods[randomIndex]
+    const html = `
+    <div class="card text-center mx-auto" style="max-width: 18rem;">
+      <div class="card-header bg-success text-white">Today's Pick</div>
+      <div class="card-body">
+        <h5 class="card-title">${food}</h5>
+      </div>
+    </div>`
+    render(html)
+}
+
+// Task 4 — Word Lengths
+function wordLengths() {
+    const list = foods.map(f => `<li class="list-group-item">${f} — ${f.length} letters</li>`).join('')
+    render(`<ul class="list-group">${list}</ul>`)
 }
 
 // ---- Event listeners (buttons) ----
@@ -85,52 +103,6 @@ document.getElementById('btnList').addEventListener('click', listFoods)
 document.getElementById('btnNums').addEventListener('click', numberedFoods)
 document.getElementById('btnFilter').addEventListener('click', filterFoods)
 document.getElementById('btnForEach').addEventListener('click', forEachFoods)
-
-//  ---------------STUDENT WORK SECTION--------------
-
-/* 
-  Task 1 — Uppercase List
-  -----------------------
-  - Use .map() to create a new array with all foods in uppercase
-  - Display the results as an unordered list (<ul>)
-*/
-function uppercaseList () {
-  // TODO: Write your code here
-}
-
-/* 
-  Task 2 — Reverse List
-  ---------------------
-  - Show the foods array in reverse order
-  - You may use a backwards loop OR the built-in .reverse()
-*/
-function reverseList () {
-  // TODO: Write your code here
-}
-
-/* 
-  Task 3 — Random Food Picker
-  ---------------------------
-  - Use Math.random to pick a random food from the array
-  - Display it in a Bootstrap card with a heading like "Today's Pick"
-*/
-function randomFoodPicker () {
-  // TODO: Write your code here
-}
-
-/* 
-  Task 4 — Word Lengths
-  ---------------------
-  - Loop through each food in the array
-  - Count the number of characters in each one
-  - Display results in the format: Food — X letters
-*/
-function wordLengths () {
-  // TODO: Write your code here
-}
-
-// ---- Event listeners for the new buttons ----
-// (Make sure to add matching buttons in index.html)
 document.getElementById('btnUppercase').addEventListener('click', uppercaseList)
 document.getElementById('btnReverse').addEventListener('click', reverseList)
 document.getElementById('btnRandom').addEventListener('click', randomFoodPicker)
